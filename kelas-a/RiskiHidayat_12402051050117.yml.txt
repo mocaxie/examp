@@ -1,0 +1,259 @@
+# ==============================================================================
+# TUGAS DATABASE SISTEM INFORMASI SEKOLAH
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# INFORMASI MAHASISWA
+# ------------------------------------------------------------------------------
+mahasiswa:
+  nama: Riski Hidayat
+  nim: "12402051050117"
+  kelas: 3-A
+  email: riskih908@gmail.com
+  github_username: riskihidayat123
+
+# ------------------------------------------------------------------------------
+# INFORMASI TUGAS
+# ------------------------------------------------------------------------------
+tugas:
+  judul: Database Sistem Informasi Sekolah
+  tanggal_pengumpulan: "2026-01-05"
+  mata_kuliah: Teknologi Berbasis Data dan Jaringan
+  dosen_pengampu: Al Muhdill Karim, S.IP, M.Hum
+
+# ------------------------------------------------------------------------------
+# INFORMASI DATABASE
+# ------------------------------------------------------------------------------
+database:
+  nama_database: sekolah_db
+  mysql_version: "8.0.44"
+  total_tabel: 4
+  
+  tabel:
+    - nama: siswa
+      jumlah_record: 6
+      kolom:
+        - id_siswa (INT, PRIMARY KEY, AUTO_INCREMENT)
+        - nis (VARCHAR 20, UNIQUE)
+        - nama (VARCHAR 100)
+        - jenis_kelamin (ENUM L/P)
+        - tanggal_lahir (DATE)
+        - alamat (TEXT)
+        - id_kelas (INT)
+    
+    - nama: guru
+      jumlah_record: 3
+      kolom:
+        - id_guru (INT, PRIMARY KEY, AUTO_INCREMENT)
+        - nip (VARCHAR 20, UNIQUE)
+        - nama (VARCHAR 100)
+        - mata_pelajaran (VARCHAR 50)
+        - no_telp (VARCHAR 15)
+    
+    - nama: kelas
+      jumlah_record: 3
+      kolom:
+        - id_kelas (INT, PRIMARY KEY, AUTO_INCREMENT)
+        - nama_kelas (VARCHAR 20)
+        - tingkat (INT)
+        - wali_kelas (INT, FOREIGN KEY)
+    
+    - nama: nilai
+      jumlah_record: 18
+      kolom:
+        - id_nilai (INT, PRIMARY KEY, AUTO_INCREMENT)
+        - id_siswa (INT, FOREIGN KEY)
+        - id_guru (INT, FOREIGN KEY)
+        - mata_pelajaran (VARCHAR 50)
+        - nilai_angka (DECIMAL 5,2)
+        - semester (INT)
+
+# ------------------------------------------------------------------------------
+# SQL QUERIES
+# ------------------------------------------------------------------------------
+sql_queries:
+  create_database: |
+    CREATE DATABASE sekolah_db;
+    USE sekolah_db;
+  
+  create_table_siswa: |
+    CREATE TABLE siswa (
+        id_siswa INT PRIMARY KEY AUTO_INCREMENT,
+        nis VARCHAR(20) UNIQUE,
+        nama VARCHAR(100),
+        jenis_kelamin ENUM('L', 'P'),
+        tanggal_lahir DATE,
+        alamat TEXT,
+        id_kelas INT
+    );
+  
+  create_table_guru: |
+    CREATE TABLE guru (
+        id_guru INT PRIMARY KEY AUTO_INCREMENT,
+        nip VARCHAR(20) UNIQUE,
+        nama VARCHAR(100),
+        mata_pelajaran VARCHAR(50),
+        no_telp VARCHAR(15)
+    );
+  
+  create_table_kelas: |
+    CREATE TABLE kelas (
+        id_kelas INT PRIMARY KEY AUTO_INCREMENT,
+        nama_kelas VARCHAR(20),
+        tingkat INT,
+        wali_kelas INT,
+        FOREIGN KEY (wali_kelas) REFERENCES guru(id_guru)
+    );
+  
+  create_table_nilai: |
+    CREATE TABLE nilai (
+        id_nilai INT PRIMARY KEY AUTO_INCREMENT,
+        id_siswa INT,
+        id_guru INT,
+        mata_pelajaran VARCHAR(50),
+        nilai_angka DECIMAL(5,2),
+        semester INT,
+        FOREIGN KEY (id_siswa) REFERENCES siswa(id_siswa),
+        FOREIGN KEY (id_guru) REFERENCES guru(id_guru)
+    );
+
+  insert_sample_data: |
+    -- Insert Guru
+    INSERT INTO guru VALUES
+    (1, 'NIP001', 'Agus Supriadi', 'Matematika', '081234567890'),
+    (2, 'NIP002', 'Siti Nurhaliza', 'Bahasa Indonesia', '081298765432'),
+    (3, 'NIP003', 'Bambang Setiawan', 'Bahasa Inggris', '081345678901');
+    
+    -- Insert Kelas
+    INSERT INTO kelas VALUES
+    (1, 'X-IPA-1', 10, 1),
+    (2, 'X-IPA-2', 10, 2),
+    (3, 'XI-IPA-1', 11, 3);
+    
+    -- Insert Siswa
+    INSERT INTO siswa VALUES
+    (1, '12402051050117', 'Riski Hidayat', 'L', '2008-01-15', 'Jl. Merdeka No.10, Jakarta', 1),
+    (2, '2024002', 'Siti Aisyah', 'P', '2008-03-20', 'Jl. Sudirman No.25, Jakarta', 1),
+    (3, '2024003', 'Budi Santoso', 'L', '2008-05-12', 'Jl. Thamrin No.5, Jakarta', 2),
+    (4, '2024004', 'Rina Wati', 'P', '2008-07-08', 'Jl. Gatot Subroto No.18, Jakarta', 2),
+    (5, '2024005', 'Dedi Setiawan', 'L', '2007-06-22', 'Jl. Ahmad Yani No.33, Jakarta', 3),
+    (6, '2024006', 'Indah Permata', 'P', '2007-08-30', 'Jl. Diponegoro No.12, Jakarta', 3);
+    
+    -- Insert Nilai
+    INSERT INTO nilai VALUES
+    (1, 1, 1, 'Matematika', 87.5, 1),
+    (2, 1, 2, 'Bahasa Indonesia', 92.0, 1),
+    (3, 1, 3, 'Bahasa Inggris', 85.5, 1),
+    (4, 2, 1, 'Matematika', 91.0, 1),
+    (5, 2, 2, 'Bahasa Indonesia', 88.5, 1),
+    (6, 2, 3, 'Bahasa Inggris', 90.0, 1),
+    (7, 3, 1, 'Matematika', 78.5, 1),
+    (8, 3, 2, 'Bahasa Indonesia', 83.0, 1),
+    (9, 3, 3, 'Bahasa Inggris', 80.5, 1),
+    (10, 4, 1, 'Matematika', 89.0, 1),
+    (11, 4, 2, 'Bahasa Indonesia', 86.5, 1),
+    (12, 4, 3, 'Bahasa Inggris', 88.0, 1),
+    (13, 5, 1, 'Matematika', 84.0, 1),
+    (14, 5, 2, 'Bahasa Indonesia', 87.5, 1),
+    (15, 5, 3, 'Bahasa Inggris', 82.0, 1),
+    (16, 6, 1, 'Matematika', 93.5, 1),
+    (17, 6, 2, 'Bahasa Indonesia', 90.5, 1),
+    (18, 6, 3, 'Bahasa Inggris', 92.5, 1);
+
+# ------------------------------------------------------------------------------
+# QUERY TESTING
+# ------------------------------------------------------------------------------
+testing_queries:
+  select_all_siswa: SELECT * FROM siswa;
+  
+  siswa_per_kelas: |
+    SELECT s.nama, k.nama_kelas 
+    FROM siswa s 
+    JOIN kelas k ON s.id_kelas = k.id_kelas
+    ORDER BY k.nama_kelas, s.nama;
+  
+  rata_rata_nilai: |
+    SELECT s.nama, ROUND(AVG(n.nilai_angka), 2) as rata_rata 
+    FROM siswa s 
+    JOIN nilai n ON s.id_siswa = n.id_siswa 
+    GROUP BY s.id_siswa, s.nama
+    ORDER BY rata_rata DESC;
+  
+  nilai_tertinggi_per_mapel: |
+    SELECT n.mata_pelajaran, s.nama, n.nilai_angka as nilai_tertinggi
+    FROM nilai n
+    JOIN siswa s ON n.id_siswa = s.id_siswa
+    WHERE (n.mata_pelajaran, n.nilai_angka) IN (
+        SELECT mata_pelajaran, MAX(nilai_angka)
+        FROM nilai
+        GROUP BY mata_pelajaran
+    )
+    ORDER BY n.mata_pelajaran;
+
+# ------------------------------------------------------------------------------
+# CARA RESTORE DATABASE
+# ------------------------------------------------------------------------------
+restore_instructions: |
+  1. Buka CMD/Terminal
+  2. Login MySQL: mysql -u root -p
+  3. Buat database: CREATE DATABASE sekolah_db;
+  4. Pilih database: USE sekolah_db;
+  5. Copy-paste semua query CREATE TABLE
+  6. Copy-paste semua query INSERT INTO
+  7. Test: SHOW TABLES; dan SELECT * FROM siswa;
+
+# ------------------------------------------------------------------------------
+# BACKUP DATABASE
+# ------------------------------------------------------------------------------
+backup_command: mysqldump -u root -p sekolah_db > sekolah_backup.sql
+
+# ------------------------------------------------------------------------------
+# LINK REPOSITORY
+# ------------------------------------------------------------------------------
+repository:
+  backup_file: https://github.com/riskihidayat123/tugas-database/blob/main/sekolah_backup.sql
+  screenshots: https://github.com/riskihidayat123/tugas-database/tree/main/screenshots
+
+# ------------------------------------------------------------------------------
+# CATATAN
+# ------------------------------------------------------------------------------
+notes: |
+  Database sistem informasi sekolah dengan 4 tabel utama:
+  - siswa: menyimpan data siswa
+  - guru: menyimpan data guru
+  - kelas: menyimpan data kelas dan wali kelas
+  - nilai: menyimpan data nilai siswa per mata pelajaran
+  
+  Relasi antar tabel:
+  - kelas.wali_kelas -> guru.id_guru (1 kelas punya 1 wali kelas)
+  - siswa.id_kelas -> kelas.id_kelas (banyak siswa dalam 1 kelas)
+  - nilai.id_siswa -> siswa.id_siswa (1 siswa punya banyak nilai)
+  - nilai.id_guru -> guru.id_guru (1 guru punya banyak nilai)
+
+# ------------------------------------------------------------------------------
+# RELASI DATABASE
+# ------------------------------------------------------------------------------
+relasi_database:
+  - dari: kelas.wali_kelas
+    ke: guru.id_guru
+    tipe: Many-to-One
+    keterangan: Setiap kelas memiliki satu wali kelas
+  
+  - dari: siswa.id_kelas
+    ke: kelas.id_kelas
+    tipe: Many-to-One
+    keterangan: Banyak siswa dalam satu kelas
+  
+  - dari: nilai.id_siswa
+    ke: siswa.id_siswa
+    tipe: Many-to-One
+    keterangan: Satu siswa memiliki banyak nilai
+  
+  - dari: nilai.id_guru
+    ke: guru.id_guru
+    tipe: Many-to-One
+    keterangan: Satu guru memberikan nilai ke banyak siswa
+
+# ==============================================================================
+# END OF FILE
+# ==============================================================================
